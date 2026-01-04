@@ -1,0 +1,14 @@
+#!name=Notability Plus 独立版
+#!desc=仅解锁 Notability Plus，脚本托管于个人仓库。
+#!author=Ayden
+#!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Notability.png
+
+[Script]
+# 解锁核心 (包含通用 api.revenuecat.com 和 notability.com)
+http-response ^https?:\/\/(notability\.com\/global|api\.revenuecat\.com\/v1\/(subscribers|receipts)) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/notability.js, requires-body=true, timeout=60, tag=Notability_Unlock
+
+# 清除缓存
+http-request ^https?:\/\/(notability\.com\/global|api\.revenuecat\.com\/v1\/(subscribers|receipts)) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=Notability_Header
+
+[Mitm]
+hostname = notability.com, api.revenuecat.com
