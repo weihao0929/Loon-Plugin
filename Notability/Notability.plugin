@@ -1,13 +1,13 @@
-#!name=Notability Plus解锁
+#!name=Notability Plus 解锁
 #!desc=解锁 Notability Plus，脚本托管于个人仓库。
 #!author=Ayden
 #!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Notability.PNG
 
 [Script]
-# 核心脚本路径
+# ⬇️ 重点修改：这里必须是 Notability.js (大写 N)
 http-response ^https?:\/\/(notability\.com\/global|api\.revenuecat\.com\/v1\/(subscribers|receipts)) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Notability/Notability.js, requires-body=true, timeout=60, tag=Notability_Unlock
 
-# 缓存清除脚本 (仍在根目录)
+# deleteHeader.js 还在根目录且通常是小写，保持不动
 http-request ^https?:\/\/(notability\.com\/global|api\.revenuecat\.com\/v1\/(subscribers|receipts)) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=Notability_Header
 
 [Mitm]
