@@ -1,35 +1,33 @@
 /*
-脚本功能：Notability Plus 独立解锁
-逻辑：伪装 2024 年新用户，强制解锁 Plus
+脚本功能：Notability Plus 稳健解锁版
+逻辑：不删除原有数据，仅精准覆盖 Plus 权限，防止 App 报错。
 */
+
 const obj = JSON.parse(typeof $response != "undefined" && $response.body || null);
 
-const common_data = {
-  "expires_date": "2099-09-09T09:09:09Z",
-  "original_purchase_date": "2024-01-01T00:00:00Z", // 伪装成新用户
-  "purchase_date": "2024-01-01T00:00:00Z",
-  "ownership_type": "PURCHASED",
-  "store": "app_store"
-};
-
 if (obj && obj.subscriber) {
-  // 清空旧权益
-  obj.subscriber.entitlements = {};
-  obj.subscriber.subscriptions = {};
-  obj.subscriber.original_purchase_date = "2024-01-01T00:00:00Z";
+  // 定义 Plus 会员数据
+  const data = {
+    "expires_date": "2099-09-09T09:09:09Z",
+    "original_purchase_date": "2023-02-23T02:33:33Z",
+    "purchase_date": "2023-02-23T02:33:33Z",
+    "product_identifier": "com.gingerlabs.notability.premium_subscription",
+    "period_type": "active", // 使用 active 而不是 normal
+    "store": "app_store",
+    "is_sandbox": false,
+    "ownership_type": "PURCHASED",
+    "billing_issues_detected_at": null,
+    "unsubscribe_detected_at": null
+  };
 
-  const nb_id = "com.gingerlabs.notability.premium_subscription";
+  // 1. 注入 Entitlements (权限)
+  obj.subscriber.entitlements["plus_subscription"] = data;
+
+  // 2. 注入 Subscriptions (订阅状态)
+  obj.subscriber.subscriptions["com.gingerlabs.notability.premium_subscription"] = data;
   
-  // 注入 Plus 权益
-  obj.subscriber.entitlements["plus_subscription"] = Object.assign({}, common_data, {
-    "product_identifier": nb_id
-  });
-
-  // 注入订阅状态
-  obj.subscriber.subscriptions[nb_id] = Object.assign({}, common_data, {
-    "period_type": "normal",
-    "is_sandbox": false
-  });
+  // 3. 确保非订阅列表为空，防止冲突
+  obj.subscriber.non_subscriptions = {};
 }
 
 $done({body: JSON.stringify(obj)});
