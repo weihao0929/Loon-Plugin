@@ -1,13 +1,13 @@
 #!name=GoodNotes 6 解锁
 #!desc=解锁 GoodNotes 6，脚本托管于个人仓库。
 #!author=Ayden
-#!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/GoodNotes6.png
+#!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/GoodNotes.PNG
 
 [Script]
-# 解锁核心
-http-response ^https?:\/\/ethan-api\.goodnotes\.com\/v1\/(subscribers|receipts) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/goodnotes.js, requires-body=true, timeout=60, tag=GN6_Unlock
+# 核心脚本路径
+http-response ^https?:\/\/ethan-api\.goodnotes\.com\/v1\/(subscribers|receipts) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Goodnotes/goodnotes.js, requires-body=true, timeout=60, tag=GN6_Unlock
 
-# 清除缓存 (防止304)
+# 缓存清除脚本 (仍在根目录)
 http-request ^https?:\/\/ethan-api\.goodnotes\.com\/v1\/(subscribers|receipts) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=GN6_Header
 
 [Mitm]
