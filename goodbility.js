@@ -1,8 +1,8 @@
 /*
-脚本功能：GoodNotes 6 + Notability Plus (精准解锁版)
-逻辑修正：
-1. GoodNotes: 保持已验证通过的逻辑
-2. Notability: 针对 UI 上的 "Plus" 计划，精准注入 plus_subscription 权益
+脚本功能：GoodNotes 6 + Notability Plus (强力修正版)
+逻辑更新：
+1. 暴力清空原有的 entitlements，防止 Classic/Starter 权益残留干扰。
+2. 将 Notability 的 period_type 统一改为 trial 或 normal (模拟新订阅)。
 */
 
 const obj = JSON.parse(typeof $response != "undefined" && $response.body || null);
@@ -17,8 +17,13 @@ const common_data = {
 };
 
 if (obj && obj.subscriber) {
+  // ⚠️ 关键操作：直接清空服务器返回的所有原始权益
+  // 这能确保 App 不会读到任何 "Legacy" 或 "Classic" 的标记
+  obj.subscriber.entitlements = {};
+  obj.subscriber.subscriptions = {};
+
   // ==========================================
-  // 1. GoodNotes 6 解锁 (已验证)
+  // 1. GoodNotes 6 注入
   // ==========================================
   const gn_id = "com.goodnotes.gn6_one_time_unlock_3999";
   
@@ -32,21 +37,19 @@ if (obj && obj.subscriber) {
   });
 
   // ==========================================
-  // 2. Notability Plus 解锁 (修正)
+  // 2. Notability Plus 注入
   // ==========================================
-  // 界面显示: Plus -> 代码对应 Entitlement: plus_subscription
-  // 对应的内购商品ID (年费): com.gingerlabs.notability.premium_subscription
-  
   const nb_id = "com.gingerlabs.notability.premium_subscription";
 
-  // 精准注入 "plus_subscription" 权益
+  // 这里的 key 必须是 plus_subscription
   obj.subscriber.entitlements["plus_subscription"] = Object.assign({}, common_data, {
     "product_identifier": nb_id
   });
 
-  // 注入对应的订阅状态
+  // 注入订阅信息
   obj.subscriber.subscriptions[nb_id] = Object.assign({}, common_data, {
-    "period_type": "active", // 这里必须是 active
+    // 改回 normal，模仿正常的年费订阅状态
+    "period_type": "normal", 
     "is_sandbox": false
   });
 }
