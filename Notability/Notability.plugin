@@ -1,14 +1,15 @@
 #!name=Notability Plus 解锁
-#!desc=解锁 Notability Plus，脚本托管于个人仓库。
+#!desc=Notability 解锁插件 (修复版)
 #!author=Ayden
 #!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Notability.PNG
 
 [Script]
-# ⬇️ 重点修改：这里必须是 Notability.js (大写 N)
-http-response ^https?:\/\/(notability\.com\/global|api\.revenuecat\.com\/v1\/(subscribers|receipts)) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Notability/Notability.js, requires-body=true, timeout=60, tag=Notability_Unlock
+# 解锁核心 (正则微调，覆盖更广)
+http-response ^https?:\/\/.*(notability|revenuecat).*\/(global|subscribers|receipts) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Notability/Notability.js, requires-body=true, timeout=60, tag=Notability_Unlock
 
-# deleteHeader.js 还在根目录且通常是小写，保持不动
-http-request ^https?:\/\/(notability\.com\/global|api\.revenuecat\.com\/v1\/(subscribers|receipts)) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=Notability_Header
+# 清除缓存 (必须有，否则App一直用本地缓存)
+http-request ^https?:\/\/.*(notability|revenuecat).*\/(global|subscribers|receipts) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=Notability_Header
 
 [Mitm]
-hostname = notability.com, api.revenuecat.com
+# ⚠️ 关键修改：增加了 *.notability.com
+hostname = notability.com, *.notability.com, api.revenuecat.com
