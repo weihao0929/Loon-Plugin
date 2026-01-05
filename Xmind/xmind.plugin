@@ -1,7 +1,7 @@
 #!name=Xmind Unlock (Token版)
 #!desc=基于 chxm1023 脚本，包含 Token 和 Device 双重验证。
 #!author=chxm1023 & Ayden
-#!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Xmind.png
+#!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Xmind.PNG
 
 [Script]
 # 核心脚本：匹配 devices 和 token 接口
