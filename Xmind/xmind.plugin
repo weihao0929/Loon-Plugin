@@ -1,0 +1,11 @@
+#!name=Xmind Unlock (Legacy)
+#!desc=移植自2022年旧脚本，仅供测试是否对当前版本有效。
+#!author=R·E & Ayden
+#!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Xmind.png
+
+[Script]
+# 尝试拦截用户状态接口
+http-response ^https?:\/\/.*\.xmind\.(cn|net|app)\/_res\/user_sub_status script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Xmind/xmind.js, requires-body=true, timeout=60, tag=Xmind_Unlock
+
+[Mitm]
+hostname = *.xmind.cn, *.xmind.net, *.xmind.app
