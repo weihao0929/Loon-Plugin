@@ -5,7 +5,7 @@
 
 [Script]
 # 核心脚本：匹配 devices 和 token 接口
-http-response ^https?:\/\/.*xmind\..*\/_res\/(devices|token\/.*) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Xmind/Xmind.js, requires-body=true, timeout=60, tag=Xmind_Unlock
+http-response ^https?:\/\/.*xmind\..*\/_res\/(devices|token\/.*) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Xmind/xmind.js, requires-body=true, timeout=60, tag=Xmind_Unlock
 
 [Mitm]
 hostname = *.xmind.*, *.xmind.cn, *.xmind.net, *.xmind.app
