@@ -1,5 +1,7 @@
 /*
-脚本功能：GoodNotes 6 独立解锁
+脚本功能：GoodNotes 6 解锁 (双保险增强版)
+脚本作者：Ayden
+说明：同时注入 GN6 和 GN5 权益，防止掉授权。
 */
 const obj = JSON.parse(typeof $response != "undefined" && $response.body || null);
 
@@ -13,15 +15,22 @@ const common_data = {
 };
 
 if (obj && obj.subscriber) {
-  const gn_id = "com.goodnotes.gn6_one_time_unlock_3999";
-  
-  // 注入权益
+  // 1. 注入 GoodNotes 6 永久买断权益 (核心)
+  const gn6_id = "com.goodnotes.gn6_one_time_unlock_3999";
   obj.subscriber.entitlements["apple_access"] = Object.assign({}, common_data, {
-    "product_identifier": gn_id
+    "product_identifier": gn6_id
   });
-  
-  // 注入订阅状态 (标记为 normal 以去除试用条)
-  obj.subscriber.subscriptions[gn_id] = Object.assign({}, common_data, {
+  obj.subscriber.subscriptions[gn6_id] = Object.assign({}, common_data, {
+    "period_type": "normal",
+    "is_sandbox": false
+  });
+
+  // 2. 注入 GoodNotes 5 权益 (防御性注入，更稳)
+  const gn5_id = "com.goodnotes.gn.full_unlock";
+  obj.subscriber.entitlements["com.goodnotes.gn.full_unlock"] = Object.assign({}, common_data, {
+    "product_identifier": gn5_id
+  });
+  obj.subscriber.subscriptions[gn5_id] = Object.assign({}, common_data, {
     "period_type": "normal",
     "is_sandbox": false
   });
