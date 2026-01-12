@@ -1,0 +1,15 @@
+#!name=每日英语听力 VIP
+#!desc=解锁每日英语听力 VIP 权益。
+#!author=Ayden
+#!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Eudic.png
+
+[Script]
+# 核心脚本：拦截用户信息接口
+# 涵盖了 dict.eudic.net 和 ting.eudic.net 等常见域名
+http-response ^https?:\/\/.*(eudic|ting|frhelper|eshelper).*\/(v1\/user\/info|account\/get_user_info) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Eudic/eudic.js, requires-body=true, timeout=60, tag=Eudic_Unlock
+
+# 清除缓存：强制 App 重新请求用户信息 (调用你根目录的公用脚本)
+http-request ^https?:\/\/.*(eudic|ting|frhelper|eshelper).*\/(v1\/user\/info|account\/get_user_info) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=Eudic_Header
+
+[Mitm]
+hostname = dict.eudic.net, *.eudic.net, *.tingclass.net, api.frhelper.com, app.eudic.net
