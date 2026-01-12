@@ -1,16 +1,16 @@
-#!name=每日英语听力 VIP (终极版)
-#!desc=强制拦截所有用户信息接口。
+#!name=每日英语听力 VIP (登录修复版)
+#!desc=修复新账号登录无法解锁的问题。
 #!author=Ayden
 #!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Eudic.png
 
 [Rule]
-# 拦截开屏广告
+# 拦截开屏和横幅广告
 URL-REGEX, ^https?:\/\/.*(eudic|ting|frhelper).*\/(v\d\/startup_picture|ad\/), REJECT
 
 [Script]
-# 🔓 核心解锁：正则极度放宽，匹配 user/info, userinfo, profile 等
-http-response ^https?:\/\/.*(eudic|ting|frhelper).*\/(.*(user|account).*(info|profile)|v\d\/account\/.*) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Eudic/eudic.js, requires-body=true, timeout=60, tag=Eudic_Unlock
+# 🔓 核心解锁：正则大幅增强，包含 login(登录), account(账户), info(信息)
+http-response ^https?:\/\/.*(eudic|ting|frhelper).*\/(v\d\/account\/.*|.*info|.*profile|.*login) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Eudic/eudic.js, requires-body=true, timeout=60, tag=Eudic_Unlock
 
 [Mitm]
-# 覆盖所有可能的子域名
-hostname = *.eudic.net, *.tingclass.net, *.frhelper.com, *.eudic.com, eudic.net
+# 域名保持不变
+hostname = dict.eudic.net, *.eudic.net, *.tingclass.net, api.frhelper.com, app.eudic.net
