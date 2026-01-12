@@ -1,15 +1,15 @@
-#!name=每日英语听力 VIP
-#!desc=解锁每日英语听力 VIP 权益。
+#!name=每日英语听力 VIP (净化版)
+#!desc=解锁终身 VIP + 拦截开屏广告。
 #!author=Ayden
 #!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Eudic.png
 
-[Script]
-# 核心脚本：拦截用户信息接口
-# 涵盖了 dict.eudic.net 和 ting.eudic.net 等常见域名
-http-response ^https?:\/\/.*(eudic|ting|frhelper|eshelper).*\/(v1\/user\/info|account\/get_user_info) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Eudic/eudic.js, requires-body=true, timeout=60, tag=Eudic_Unlock
+[Rule]
+# 🛑 拦截开屏广告和推广接口
+URL-REGEX, ^https?:\/\/.*(eudic|ting|frhelper).*\/(v\d\/startup_picture|ad\/), REJECT
 
-# 清除缓存：强制 App 重新请求用户信息 (调用你根目录的公用脚本)
-http-request ^https?:\/\/.*(eudic|ting|frhelper|eshelper).*\/(v1\/user\/info|account\/get_user_info) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/deleteHeader.js, timeout=60, tag=Eudic_Header
+[Script]
+# 🔓 解锁 VIP 信息 (涵盖多域名)
+http-response ^https?:\/\/.*(eudic|ting|frhelper).*\/(v1\/user\/info|account\/get_user_info) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Eudic/eudic.js, requires-body=true, timeout=60, tag=Eudic_Unlock
 
 [Mitm]
-hostname = dict.eudic.net, *.eudic.net, *.tingclass.net, api.frhelper.com, app.eudic.net
+hostname = dict.eudic.net, *.eudic.net, *.tingclass.net, api.frhelper.com, app.eudic.net, *.ting.eudic.net
