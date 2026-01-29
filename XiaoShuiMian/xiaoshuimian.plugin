@@ -4,8 +4,7 @@
 #!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/XiaoShuiMian.png
 
 [Script]
-# 🔓 核心解锁：匹配 api.psy-1.com 下的所有请求 (cosleep, user, etc.)
-# 脚本内部会自动判断是否为 JSON，不会影响音频下载
+# 🔓 核心解锁：匹配 api.psy-1.com 下的所有请求
 http-response ^https?:\/\/api\.psy-1\.com\/.* script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/XiaoShuiMian/xiaoshuimian.js, requires-body=true, timeout=60, tag=Sleep_Unlock
 
 [Mitm]
