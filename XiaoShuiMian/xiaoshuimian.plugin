@@ -1,0 +1,13 @@
+#!name=小睡眠 VIP
+#!desc=解锁小睡眠 App 永久会员。
+#!author=Ayden
+#!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/XiaoShuiMian.png
+
+[Script]
+# 🔓 核心解锁：拦截 user, profile, config 等关键接口
+# 注意：域名通常是 api.psy-1.com
+http-response ^https?:\/\/api\.psy-1\.com\/.*(user|profile|config|vip) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/XiaoShuiMian/xiaoshuimian.js, requires-body=true, timeout=60, tag=Sleep_Unlock
+
+[Mitm]
+# ⚠️ 必须包含这个域名
+hostname = api.psy-1.com
