@@ -1,58 +1,72 @@
 /*
-脚本功能：小睡眠 VIP 暴力解锁 (全域遍历版)
+脚本功能：小睡眠 VIP 暴力解锁 (地毯式轰炸版)
 脚本作者：Ayden
-说明：自动递归解锁列表中的音频资源
+更新时间：2026-01-29
 */
 const url = $request.url;
 let body = $response.body;
 
-// 定义要注入的 VIP 核心数据
-const vipMix = {
-    "is_vip": true,
-    "vip_type": 1,
-    "vip_expire_time": 4092599349,
-    "expires_date": 4092599349,
-    "status": 1
-};
-
-// 递归解锁函数：专门寻找锁头并撬开
-function traverseAndUnlock(obj) {
+// 递归修改函数：见到锁就砸，见到VIP就开
+function bomb(obj) {
     if (typeof obj !== 'object' || obj === null) return;
 
-    // 1. 如果对象里包含特定的“锁”字段，直接修改
-    if (obj.hasOwnProperty('is_locked')) obj.is_locked = false;
-    if (obj.hasOwnProperty('lock')) obj.lock = false;
-    if (obj.hasOwnProperty('is_free')) obj.is_free = true;
-    if (obj.hasOwnProperty('price')) obj.price = 0;
-    
-    // 2. 如果对象里本来就有 VIP 字段，强制覆盖为 true
-    if (obj.hasOwnProperty('is_vip')) obj.is_vip = true;
+    // --- 1. 砸开所有的锁 (常见字段全部覆盖) ---
+    const lockFields = ['is_locked', 'locked', 'lock', 'need_vip', 'vip_only', 'preview'];
+    lockFields.forEach(key => {
+        if (obj.hasOwnProperty(key)) {
+            obj[key] = 0; // 统统设为 0 (false)
+        }
+    });
 
-    // 3. 继续深入遍历（处理数组和子对象）
+    // --- 2. 免费所有的价 (价格清零) ---
+    const priceFields = ['price', 'original_price', 'discount_price'];
+    priceFields.forEach(key => {
+        if (obj.hasOwnProperty(key)) {
+            obj[key] = 0;
+        }
+    });
+
+    // --- 3. 开启所有的权 (VIP权限) ---
+    const vipFields = ['is_vip', 'is_life_vip', 'vip', 'is_free', 'free', 'download'];
+    vipFields.forEach(key => {
+        if (obj.hasOwnProperty(key)) {
+            obj[key] = 1; // 统统设为 1 (true)
+        }
+    });
+
+    // --- 4. 暴力修正 VIP 时间 ---
+    if (obj.hasOwnProperty('vip_expire_time')) obj.vip_expire_time = 4092599349;
+    if (obj.hasOwnProperty('expires_date')) obj.expires_date = 4092599349;
+
+    // --- 5. 继续深入递归 ---
     for (let key in obj) {
-        traverseAndUnlock(obj[key]);
+        bomb(obj[key]);
     }
 }
 
 if (body) {
     try {
         let obj = JSON.parse(body);
+        
+        // 执行轰炸
+        bomb(obj);
 
-        // 执行全域解锁
-        traverseAndUnlock(obj);
-
-        // 针对用户信息接口的额外保底 (防止递归没覆盖到顶层)
-        if (url.indexOf('user') !== -1 || url.indexOf('profile') !== -1 || url.indexOf('vip') !== -1) {
+        // 针对 user/info 接口的额外保险
+        if (url.indexOf('user/info') !== -1 || url.indexOf('user/profile') !== -1) {
+             const vipMeta = {
+                "is_vip": true,
+                "vip_type": 1,
+                "status": 1,
+                "vip_expire_time": 4092599349
+            };
             if (obj.data && typeof obj.data === 'object') {
-                Object.assign(obj.data, vipMix);
-            } else {
-                Object.assign(obj, vipMix);
+                Object.assign(obj.data, vipMeta);
+                if (obj.data.user) Object.assign(obj.data.user, vipMeta);
             }
         }
 
         $done({ body: JSON.stringify(obj) });
     } catch (e) {
-        // 如果不是 JSON 数据（比如音频文件本身），直接放行
         $done({});
     }
 } else {
