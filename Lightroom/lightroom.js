@@ -1,7 +1,7 @@
 /*
-脚本功能：Lightroom iPad 高级版 (终极补全版)
+脚本功能：Lightroom iPad 高级版 (全权限强制开启版)
 脚本作者：Ayden
-说明：强制覆写所有权限字段，清空试用标记。
+说明：追加交易流水号，强开所有 sao 权限。
 */
 const body = $response.body;
 
@@ -9,7 +9,7 @@ if (body) {
     try {
         let obj = JSON.parse(body);
         
-        // 1. 强制覆写授权状态，并附送 1TB 云空间假象防检测
+        // 1. 强制激活并附送云空间
         obj.entitlement = {
             "status": "ACTIVE",
             "storage": {
@@ -20,27 +20,28 @@ if (body) {
             }
         };
         
-        // 2. 注入核心套餐包
+        // 2. 伪造完整订单信息 (全线特权置为 1)
         obj.current_subs = {
             "product_id": "lightroom",
-            "store": "adobe",
+            "store": "app_store", // 伪装成苹果商店内购
+            "transaction_id": "490001234567890", // 追加假交易号
             "purchase_date": "2023-01-01T00:00:00.000Z",
             "sao": {
-                "inpkg_CCES": "0",
-                "inpkg_CCLE": "1", // 核心 Lightroom 权限
-                "inpkg_CCSN": "0",
-                "inpkg_CCSV": "0",
-                "inpkg_LCCC": "0",
-                "inpkg_LPES": "0",
-                "inpkg_LSCE": "0",
-                "inpkg_MCMU": "0",
-                "inpkg_PHLT": "0",
-                "inpkg_PHLT2": "0",
-                "inpkg_PLES": "0"
+                "inpkg_CCES": "1",
+                "inpkg_CCLE": "1",
+                "inpkg_CCSN": "1",
+                "inpkg_CCSV": "1",
+                "inpkg_LCCC": "1",
+                "inpkg_LPES": "1",
+                "inpkg_LSCE": "1",
+                "inpkg_MCMU": "1",
+                "inpkg_PHLT": "1",
+                "inpkg_PHLT2": "1",
+                "inpkg_PLES": "1"
             }
         };
         
-        // 3. 删除可能导致冲突的试用标记
+        // 3. 抹除试用记录
         if (obj.trial_subs) {
             delete obj.trial_subs;
         }
