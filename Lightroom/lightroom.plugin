@@ -1,11 +1,11 @@
-#!name=Lightroom 高级版
-#!desc=解锁 Lightroom 移动版高级编辑功能 (本地私有版)。
+#!name=Lightroom iPad 高级版
+#!desc=解锁 Lightroom iPadOS 版高级编辑功能。
 #!author=Ayden
 #!icon=https://raw.githubusercontent.com/weihao0929/icon_library/main/icon/Lightroom.png
 
 [Script]
 # 🔓 拦截 Adobe 账号信息接口，注入高级权限
-http-response ^https:\/\/photos\.adobe\.io\/v2\/accounts.* script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Lightroom/lightroom.js, requires-body=true, timeout=60, tag=LR_Unlock
+http-response ^https:\/\/photos\.adobe\.io\/v2\/accounts.* script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/main/Lightroom/lightroom.js, requires-body=true, timeout=60, tag=LR_iPad_Unlock
 
 [Mitm]
 hostname = photos.adobe.io
