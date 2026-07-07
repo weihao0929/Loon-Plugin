@@ -1,0 +1,9 @@
+#!name=英辞 解锁
+#!desc=英辞 VIP 解锁插件。
+#!author=liul0ng
+
+[Script]
+http-response ^https:\/\/api\.mojidict\.com\/app\/endict\/parse\/functions\/getNPrivileges script-path=https://raw.githubusercontent.com/liul0ng/quanx/refs/heads/main/yingci.js, requires-body=true, timeout=60, tag=Yingci_Unlock
+
+[Mitm]
+hostname = api.mojidict.com
