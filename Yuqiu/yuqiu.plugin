@@ -1,0 +1,10 @@
+#!name=语球 解锁
+#!desc=语球 VIP 解锁插件。
+#!author=liul0ng
+
+[Script]
+http-response ^https?:\/\/api\.kotobaheworld\.com\.cn\/api\/user script-path=https://raw.githubusercontent.com/liul0ng/quanx/refs/heads/main/yuqiu.js, requires-body=true, timeout=60, tag=Yuqiu_Unlock
+
+[Mitm]
+# 修复：同时包含 .com 和 .com.cn 以匹配正则
+hostname = api.kotobaheworld.com, api.kotobaheworld.com.cn
