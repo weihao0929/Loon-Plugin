@@ -3,8 +3,8 @@
 #!author=Ayden
 
 [Script]
-# 🔓 拦截 RevenueCat 的核心验证接口 (收据验证 和 用户信息)
-http-response ^https:\/\/api\.revenuecat\.com\/v1\/(receipts|subscribers\/[^/]+) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/refs/heads/main/echoloop/echoloop.js, requires-body=true, timeout=60, tag=EchoLoop_Unlock
+# 🔓 放宽正则，匹配所有 subscribers 和 receipts 相关的请求
+http-response ^https:\/\/api\.revenuecat\.com\/v1\/(receipts|subscribers) script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/refs/heads/main/echoloop/echoloop.js, requires-body=true, timeout=60, tag=EchoLoop_Unlock
 
 [Mitm]
 # 抓取 RevenueCat 域名
