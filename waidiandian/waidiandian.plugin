@@ -1,0 +1,11 @@
+#!name=歪点点 解锁
+#!desc=歪点点模拟器 VIP 解锁插件。
+#!author=Ayden
+
+[Script]
+# 🔓 拦截歪点点真正的后端 API (因为不知道具体路径，先进行全量匹配)
+http-response ^https?:\/\/api\.qufaquan\.cn\/.* script-path=https://raw.githubusercontent.com/weihao0929/Loon-Plugin/refs/heads/main/waidiandian/wdd.js, requires-body=true, timeout=60, tag=WDD_Unlock
+
+[Mitm]
+# 精准抓取真实域名
+hostname = api.qufaquan.cn
